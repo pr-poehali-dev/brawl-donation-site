@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
+import PaymentModal from "./PaymentModal";
 
 interface DonationTier {
   id: string;
@@ -19,29 +21,33 @@ interface DonationTier {
   popular?: boolean;
   color: string;
   icon: string;
+  gems?: number;
 }
 
 const donationTiers: DonationTier[] = [
   {
-    id: "supporter",
+    id: "starter",
     title: "Поддержка",
     price: "₽299",
     description: "Базовая поддержка проекта",
     benefits: [
+      "170 гемов на аккаунт",
       "Особый значок в игре",
       "Доступ к закрытому чату",
       "Благодарность в титрах",
     ],
     color: "from-blue-500 to-cyan-500",
     icon: "Heart",
+    gems: 170,
   },
   {
-    id: "hero",
-    title: "Герой",
+    id: "premium",
+    title: "Falsi Premium",
     price: "₽999",
-    description: "Стань героем Фальси Бравл",
+    description: "Премиум подписка",
     benefits: [
-      "Эксклюзивный скин персонажа",
+      "500 гемов на аккаунт",
+      "Рандомный скин персонажа",
       "VIP статус в сообществе",
       "Ранний доступ к обновлениям",
       "Персональная благодарность",
@@ -49,6 +55,7 @@ const donationTiers: DonationTier[] = [
     popular: true,
     color: "from-purple-500 to-pink-500",
     icon: "Crown",
+    gems: 500,
   },
   {
     id: "legend",
@@ -56,6 +63,7 @@ const donationTiers: DonationTier[] = [
     price: "₽2499",
     description: "Максимальная поддержка",
     benefits: [
+      "1500 гемов на аккаунт",
       "Именной NPC в игре",
       "Участие в тестировании",
       "Прямая связь с разработчиками",
@@ -63,6 +71,7 @@ const donationTiers: DonationTier[] = [
     ],
     color: "from-orange-500 to-red-500",
     icon: "Zap",
+    gems: 1500,
   },
 ];
 
@@ -71,6 +80,12 @@ interface DonationCardProps {
 }
 
 const DonationCard = ({ tier }: DonationCardProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleBuyClick = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <Card
       className={`relative bg-slate-800/50 border-slate-700 hover:bg-slate-800/70 transition-all duration-300 hover:scale-105 ${tier.popular ? "ring-2 ring-purple-500" : ""}`}
@@ -113,12 +128,21 @@ const DonationCard = ({ tier }: DonationCardProps) => {
 
       <CardFooter>
         <Button
+          onClick={handleBuyClick}
           className={`w-full bg-gradient-to-r ${tier.color} hover:opacity-90 text-white font-semibold`}
           size="lg"
         >
           <Icon name="Heart" className="mr-2" />
           Поддержать
         </Button>
+
+        <PaymentModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          packageName={tier.title}
+          price={tier.price}
+          gems={tier.gems}
+        />
       </CardFooter>
     </Card>
   );

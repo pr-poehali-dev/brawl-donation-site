@@ -10,6 +10,10 @@ const Index = () => {
       <DonationCards />
       <GameFeatures />
       <DonorLeaderboard />
+      <footer className="bg-slate-950 py-8 text-center text-gray-400">
+        <p>© 2024 Falsi Brawl. Все права защищены.</p>
+        <p className="text-sm mt-2">Карта для переводов: 2204120122660794</p>
+      </footer>
     </div>
   );
 };
